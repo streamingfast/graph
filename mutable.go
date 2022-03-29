@@ -1,6 +1,7 @@
 package graph
 
 import (
+	"sort"
 	"strconv"
 )
 
@@ -85,13 +86,19 @@ func (g *Mutable) Order() int {
 // If do returns true, Visit returns immediately,
 // skipping any remaining neighbors, and returns true.
 //
-// The iteration order is not specified and is not guaranteed
-// to be the same every time.
 // It is safe to delete, but not to add, edges adjacent to v
 // during a call to this method.
 func (g *Mutable) Visit(v int, do func(w int, c int64) bool) bool {
-	for w, c := range g.edges[v] {
-		if do(w, c) {
+	edges := g.edges[v]
+	var keys []int
+	for k := range edges {
+		keys = append(keys, k)
+	}
+	sort.Ints(keys)
+
+	for _, k := range keys {
+		c := edges[k]
+		if do(k, c) {
 			return true
 		}
 	}
