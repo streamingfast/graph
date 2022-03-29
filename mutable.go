@@ -90,7 +90,7 @@ func (g *Mutable) Order() int {
 // during a call to this method.
 func (g *Mutable) Visit(v int, do func(w int, c int64) bool) bool {
 	edges := g.edges[v]
-	var keys []int
+	keys := make([]int, 0, len(edges))
 	for k := range edges {
 		keys = append(keys, k)
 	}
